@@ -30,21 +30,25 @@ b_1 = np.random.rand(10)
 
 n = [64, 128, 128, 128, 10]
 
+
+
 x = np.random.rand(n[0])
 W = np.random.rand(n[1],n[0])
 b = np.random.rand(n[1])
 
 def NN (x,W,b,n):
 
-    previous = NN(x,W,b,n)
+    previous = layer(x,W,b)
     
-    for n in n[:]:
+    for u in n[:]:
 
-        W = np.random.rand(n,(W.shape)[0])
-        b = np.random.rand(n)
-    
-        NN(previous,W,b,n)
+        W = np.random.rand(u,(W.shape)[0])
+        b = np.random.rand(u)
+        
+        if u != n[-1]:
+            NN(previous,W,b,n)
 
     return previous
             
 print(NN(x,W,b,n))
+
