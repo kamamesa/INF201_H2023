@@ -1,54 +1,58 @@
-# 
-# 
-# 
+# 20231011, utf-8, Spyder
+# NAME AND EMAIL ADDRESS
+# NAME AND EMAIL ADDRESS
+# INF201 Exercise 5
 
+
+'''
+Task 1
+'''
+
+# Import
 import numpy as np
 
-# Edit this to change what happens to each layer
+# "n" the list of matrix sizes
+n_vector = [64,128,128,128,10]
+L = len(n_vector)
 
-def sigma (arg):
-    return 0.0 if arg<=0 else arg
-vec_sigma = np.vectorize(sigma)
+# Containers
+Ws = []
+ys = []
+bs = []
 
-# gives y
-def layer (x, W, b):
-    W.reshape(W.shape[0],W.shape[1])
-    return vec_sigma(W @ x + b)
+# First input vector. Random contents.
+ys.append ( np.random.rand(n_vector[0],1) )
 
-'''
-# works 2 layers
-def fn (x, W_1, W_2, b_1, b_2):
-    y_1 = layer(x, W_1, b_1)
-    y_2 = layer(y_1, W_2, b_2)
-    return y_2
+# Function that does whatever. Today, it zeroes arg if it's zero or negative.
+def sigma(arg):
+    arg[arg<=0] = 0.0
+    return arg
 
-# Setup initial
-x = np.random.rand(64)
-W_1 = np.random.rand(10,64)
-b_1 = np.random.rand(10)
-'''
-
-n = [64, 128, 128, 128, 10]
-
-x = np.random.rand(n[0])
-W = np.random.rand(n[1],n[0])
-b = np.random.rand(n[1])
-first = layer(x,W,b)
+# Function that runs sigma() on previous weight, biase, and the previous layer.
+#     [-1] retrieves the most recent entry, as we assume we're working on the last entry.
+#     [i-1] would mean the same, but add i needlessly since we're building the matrices as we go.
+# We could also write this as np.add(np.dot(Ws[-1],ys[-1]),bs[-1]), but that's longer and uglier.
+def layer(Ws,ys,bs):
+    return sigma(Ws[-1] @ ys[-1] + bs[-1])
 
 
-def NN (FLAG,W,b,weights,prev=first):
+# Cycling through all the matrix sizes we want, starting at 1 because y_0 is already in ys.
+for i in range(1, L):
 
-    if FLAG:
-        prev = np.random.rand(n[0])
-    else:
-        for i in n[:]:
-            W = np.random.rand(i,W.shape[0])
-            b = np.random.rand(i)
-            layer(prev,W,b)
-        
-            NN(0,W,b,weights,prev)
+    # Generate specific size of gibberish matrix, as specified in n_vector.
+    Ws.append(np.random.rand(n_vector[i], n_vector[i-1]))
+    bs.append(np.random.rand(n_vector[i], 1))
+    
+    # Label and print the dimensions of the current W. Unwrap tuple w/ * for aesthetics.
+    print("Weight matrix W_"+str(len(Ws))+ ":", *Ws[-1].shape, "\n")
 
-    return prev
+    # Make new layer based on previous layer. layer() can find the newest of the layers itself.
+    Y_now = layer(Ws,ys,bs)
 
-print(NN(1,W,b,n))
+    # Put result
+    ys.append(Y_now)
 
+# The most recent y is y_L, let's print it.
+y_L = ys[-1]
+print("Final layer y_L:")
+print(y_L)
