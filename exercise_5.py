@@ -44,7 +44,8 @@ General method for y_L (pts 3 & 4):
 
 # "n" the list of matrix sizes, these are the layers of the network.
 n_vector = [64, 128, 128, 128, 10]
-# n amount of layers in the vector. In this case there are 5 layers
+
+# Amount of layers. In this case, there are 5.
 L = len(n_vector)
 
 # Containers
