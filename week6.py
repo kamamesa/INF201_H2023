@@ -1,6 +1,9 @@
 import numpy as np
 from torchvision import datasets, transforms
 
+# Give path of the files' directory.
+file_path = "/Users/marcusdalakerfigenschou/Documents/NMBU/3-året/INF201/Oppgaver/NN/NeuralNetProject/canvas/"
+
 def ReLu(arg):
     return np.maximum(0, arg)
 
@@ -55,9 +58,6 @@ biases_prefix = "b"
 
 # Specify the number of weight and bias sets you have (e.g., 3 sets)
 num_sets = 3
-
-# Give path of the. If they are in one directory, write the same path for both.
-file_path = "/Users/marcusdalakerfigenschou/Documents/NMBU/3-året/INF201/Oppgaver/NN/NeuralNetProject/canvas/"
 
 # Read the weights and biases for all layers for each set
 my_network.read(path+"W",
