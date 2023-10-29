@@ -56,9 +56,12 @@ biases_prefix = "b"
 # Specify the number of weight and bias sets you have (e.g., 3 sets)
 num_sets = 3
 
+# Give path of the. If they are in one directory, write the same path for both.
+file_path = "/Users/marcusdalakerfigenschou/Documents/NMBU/3-året/INF201/Oppgaver/NN/NeuralNetProject/canvas/"
+
 # Read the weights and biases for all layers for each set
-my_network.read("/Users/marcusdalakerfigenschou/Documents/NMBU/3-året/INF201/Oppgaver/NN/NeuralNetProject/canvas/W",
-                "/Users/marcusdalakerfigenschou/Documents/NMBU/3-året/INF201/Oppgaver/NN/NeuralNetProject/canvas/b", num_sets)
+my_network.read(path+"W",
+                path+"b", num_sets)
 
 # Create an example input x (adjust as needed)
 input_x = np.random.rand(784)  # Replace with your desired input
