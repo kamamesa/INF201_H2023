@@ -29,7 +29,7 @@ def freader(wfile,bfile):
         W_raw = W_f.read()
     with open(bfile) as b_f:
         b_raw = b_f.read() 
-    return W_raw.split(),b_raw.split(),W_raw.split("\n")[:-1]
+    return W_raw.split(),b_raw.split(),W_raw#.split("\n")[:-1]
 
 # Sigma fn, today it does ramp.
 def sigma(arg):
@@ -44,9 +44,12 @@ class layer():
         self.bias = np.ones(n)
 
     # Fill in data from specified weight/bias files.
-    def read_file(self,w_f,b_f):
+    def read(self,w_f,b_f):
         u = freader(w_f,b_f)
-        self.weight = u[0]
+        
+        # CULPRIT
+        self.weight = 
+
         self.bias = u[1]
 
     # Run evaluate on self with given input
@@ -68,21 +71,22 @@ class network():
             # Put layer in layer list (aka "network")
             self.layers.append(the_layer)
     
-    # Runs each layer's read-weight-from-file method. Feed it lists.
-    def fill(self,w,b):
+    # Runs each layer's read-weight-from-file method. Feed it lists of lists.
+    def read(self,w,b):
         for i in range(len(w)):
-            self.layers[i].read_file(w[i],b[i])
+            self.layers[i].read(w[i],b[i])
 
     # Runs each layer's evaluate function
-    def run(self,initial_y):
-        for i in range(len(self.layers)-1):
-#            self.layers[i].evaluate()
-            print(f"{len(self.layers)}")
-            return 1
-            
-#            ys.append(layer(Ws,ys,b))
+    def evaluate(self,initial_y):
+        print(f"weight len: {len(self.layers[0].weight)}")   # debug
+        print(f"initial y len: {len(initial_y)}")               # debug
+        self.layers[0].evaluate(initial_y)
 
-# ---- BLOCK FROM READ.PY ----
+        for i in range(1,len(self.layers)-1):
+            self.layers[i].evaluate(self.layers[i-1])
+
+
+# ---- MNIST BLOCK FROM READ.PY ----
 
 def get_mnist():
     return datasets.MNIST(root='./data', train=True, transform=transforms.ToTensor(), download=True)
@@ -98,10 +102,14 @@ x, image, label = return_image(image_index, get_mnist())
 
 # Create and fill a network from the files
 the_network = network(n_vector)
-the_network.fill(weights,biases)
+the_network.read(weights,biases)
+
+#x = x.tolist()
+#print(len(the_network.layers[0].weight))
+the_network.evaluate(x)
 
 # Do the input dance
-the_network.run(x)
+#the_network.evaluate(x)
 
 
 
